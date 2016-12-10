@@ -1,5 +1,6 @@
 package com.example.akurian.lumos;
 
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,17 @@ public class MainActivity extends AppCompatActivity {
     Button submitButton;
     int employeeId;
     private TextToSpeech tts;
+    Handler handler = new Handler();
+    final myAsync myasync=new myAsync();
+
+//    private Runnable runnableCode = new Runnable() {
+//        @Override
+//        public void run() {
+////            new myAsync().execute();
+//            handler.postDelayed(runnableCode, (5000));
+//        }
+//    };
+
 
 
     @Override
@@ -32,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             public void onInit(int status) {
                 if(status != TextToSpeech.ERROR) {
                     tts.setLanguage(Locale.US);
+                    myasync.execute();
                 }
             }
         });
@@ -44,14 +57,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        handler.post(runnableCode);
+
 
     }
 
     void checkIfEmployeeHasFilledTimeSheet(int employeeId){
         String[] missingMessages={"missing","time to fill","hello"};
-        Log.d("hi",employeeId+"");
-        if(true) {
+        String[] filledSheets={"good job","bingo","lays"};
+        if(myasync.idName.containsKey(employeeId+"")) {
             String toSpeak=missingMessages[(int)(Math.random()*missingMessages.length)];
+            speakOut(toSpeak);
+        }
+        else {
+            String toSpeak=filledSheets[(int)(Math.random()*filledSheets.length)];
             speakOut(toSpeak);
         }
     }
